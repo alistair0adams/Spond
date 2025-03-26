@@ -725,7 +725,7 @@ class Spond(_SpondBase):
         raise KeyError(errmsg)
 
     @_SpondBase.require_authentication
-    async def update_member(self, group_id: str, member: dict):
+    async def update_member(self, group_id: str, member: dict) -> JSONDict:
         """
         Update member details.
         Subject to authenticated user's access permissions.
