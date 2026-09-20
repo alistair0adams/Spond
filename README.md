@@ -3,24 +3,18 @@
 
 Simple, unofficial library with some example scripts to access data from the [Spond](https://spond.com/) API.
 
+> [!WARNING]
+> Notice breaking changes from versions =< 0.99 to versions >= 1.0
+
 ## Install
 
 `pip install spond`
 
-### Requirements
-
-- Python 3.11 or later
-- `aiohttp` 3.14.3 or later
-
-The `aiohttp` floor is a security requirement rather than a feature one. Releases
-below 3.14.3 carry known advisories in the HTTP parsers, the most serious being an
-out-of-bounds read in the C response parser that an upstream server can trigger with
-a malformed chunked response ([CVE-2026-69244](https://github.com/advisories/GHSA-cq5v-8q36-5273)).
-If you pin `aiohttp` in your own project, pin it at or above 3.14.3.
-
 ## Usage
 
 You need a username and password from Spond
+
+
 
 ### Example code
 
@@ -70,23 +64,21 @@ Get Excel attendance report for a single event, available via the web client.
 ### change_response()
 Change a member's response for an event (e.g. accept/decline)
 
-### get_posts()
-Retrieve posts from group walls.
+### update_member()
+Change details about a member. First use get_groups() to get all the member details,
+find the member you what to change and make the changes, then use this method to
+update in Spond.
 
-### get_profile()
-Retrieve information connected to the user's account.
+### get_members_xlsx()
+Get the Excel member export that is downloadable from the Spond web page.
 
-### get_get_received_payments()
-Gets the details of the received payments that is displayed under the payments
-section of a user's profile.
-
-### get_get_received_payments()
+### get_received_payments()
 Gets the details of the received payments that is displayed under the payments
 section of a user's profile.
 
 ## Example scripts
 
-The following scripts are included in `examples/`.  Some of the scripts might require additional packages to be installed (csv, ical etc).
+The following scripts are included as examples.  Some of the scripts might require additional packages to be installed (csv, ical etc).
 
 Rename the file `config.py.sample` to `config.py` and add your username and password to the file before running the samples.
 
@@ -102,55 +94,8 @@ Generates a csv-file for each event between `from_date` and `to_date` with atten
 ### transactions.py
 Generates a csv-file for transactions / payments appeared in [Spond Club](https://www.spond.com/spond-club-overview/) > Finance > Payments.
 
-### manual_test_functions.py
-Demonstrates most `get...()` methods.
-
 ## AsyncIO
 [Asyncio](https://docs.python.org/3/library/asyncio.html) might seem intimidating in the beginning, but for basic stuff, it is quite easy to follow the examples above, and just remeber to prefix functions that use the API with `async def ...` and to `await` all API-calls and all calls to said functions.
 
 [This article](https://realpython.com/async-io-python/) will give a nice introduction to both why, when and how to use asyncio in projects.
 
-## API documentation
-
-The library's API documentation is generated from the docstrings in `spond/`
-using [pdoc](https://pdoc.dev/) and published to GitHub Pages on every push
-to `main`:
-
-**[https://olen.github.io/Spond/](https://olen.github.io/Spond/)**
-
-To browse the same docs locally (useful when iterating on docstrings),
-install the dev dependencies and start the pdoc dev server:
-
-```shell
-poetry install
-poetry run pdoc --docformat numpy ./spond
-```
-
-A browser tab opens at `http://localhost:8080` with a searchable, navigable
-view of all public modules, classes, and methods, and a "View Source" link
-next to each one. Pages update automatically when the docstrings change.
-
-To generate static HTML instead:
-
-```shell
-poetry run pdoc --docformat numpy -o docs/ ./spond
-```
-
-The `--docformat numpy` flag parses NumPy-style `Parameters`, `Returns`, and
-`Raises` sections as structured lists — omit it and the param list renders as
-one flat paragraph.
-
-The leading `./` is important when developing inside the repo — without it,
-pdoc would document the *installed* `spond` package from `site-packages`
-rather than your local checkout.
-
-## Contributing
-
-### Keeping a PR up to date with `main`
-
-Add the `updateme` label to a PR targeting `main` and a GitHub Actions workflow will automatically merge `main` into the PR branch every time `main` advances. This is opt-in: PRs without the label are left alone.
-
-Limitations:
-- Only acts on PRs whose base branch is `main`. PRs targeting other branches are ignored even with the label.
-- Only works for PRs from branches in this repository. PRs from forks cannot be pushed to via the workflow's token and will be skipped (the workflow logs which PRs it skipped).
-- If `gh pr update-branch` fails for a given PR (merge conflict, branch protection rule, transient API error, etc.), that PR is skipped for this run and the failure is logged. The label stays on, so the next push to `main` will retry automatically.
