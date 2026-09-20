@@ -76,6 +76,10 @@ Retrieve posts from group walls.
 ### get_profile()
 Retrieve information connected to the user's account.
 
+### get_get_received_payments()
+Gets the details of the received payments that is displayed under the payments
+section of a user's profile.
+
 ## Example scripts
 
 The following scripts are included in `examples/`.  Some of the scripts might require additional packages to be installed (csv, ical etc).
